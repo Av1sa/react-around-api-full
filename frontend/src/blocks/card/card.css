@@ -1,0 +1,11 @@
+@import url('./__image/card__image.css');
+@import url('./__text-container/card__text-container.css');
+@import url('./__text/card__text.css');
+@import url('./__likes-text/card__likes-text.css');
+
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #FFFFFF;
+  position: relative;
+}

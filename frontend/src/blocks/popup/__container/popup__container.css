@@ -1,0 +1,7 @@
+@import url('./_form/popup__container_form.css');
+@import url('./_tooltip/popup__container_tooltip.css');
+
+.popup__container {
+  position: relative;
+}
+

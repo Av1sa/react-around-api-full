@@ -1,0 +1,11 @@
+.button_save-inactive {
+  width: 100%;
+  height: 50px;
+  color: #000000;
+  background: #FFFFFF;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  opacity: 0.2;
+  
+}

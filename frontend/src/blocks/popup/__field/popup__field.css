@@ -1,0 +1,10 @@
+.popup__field {
+  display: block;
+  margin: 0 0 48px 0;
+}
+
+@media(max-width: 500px) {
+  .popup__field {
+    margin: 0 0 32px 0;
+  }
+}

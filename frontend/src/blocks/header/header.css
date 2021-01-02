@@ -1,0 +1,16 @@
+@import url('./__logo/header__logo.css');
+@import url('./__nav-text/header__nav-text.css');
+@import url('./__menu-items/header__menu-items.css');
+@import url('./__menu-item/header__menu-item.css');
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #545454;
+}
+
+@media(max-width: 500px) {
+  .header {
+    padding: 0 27px 32px 27px;
+  }
+}

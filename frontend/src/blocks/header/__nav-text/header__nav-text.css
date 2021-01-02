@@ -1,0 +1,23 @@
+.header__nav-text {
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #fff;
+  text-decoration: none;
+  align-items: baseline;
+  background: #000;
+  border: none;
+  outline: none;
+}
+
+.header__nav-text:hover {
+  cursor: pointer;
+}
+
+.header__nav-text_muted {
+  color: #A9A9A9;
+}
+
+.header__nav-text_email {
+  font-weight: 500;
+}

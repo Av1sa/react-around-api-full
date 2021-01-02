@@ -1,0 +1,13 @@
+.button_delete {
+  border: none;
+  width: 18px;
+  height: 20px;
+  background: url(../../../images/delete_icon.svg) center no-repeat;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.button_delete-inactive {
+  display: none;
+}

@@ -1,0 +1,15 @@
+.form__submit {
+  background: #fff;
+  border-radius: 2px;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: #000;
+  height: 50px;
+  margin: 180px 0 15px 0;
+}
+
+.form__submit:hover{
+  cursor: pointer;
+}

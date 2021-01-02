@@ -1,0 +1,14 @@
+.popup__input {
+  display: block;
+  width: 100%;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  border: none;
+  border-bottom: 1px solid rgba(219, 204, 204, 0.2);
+}
+
+.popup__input_type_error {
+  border-bottom-color: #FF0000;
+}
+

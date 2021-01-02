@@ -1,0 +1,14 @@
+.button_edit {
+  width: 24px;
+  height: 24px;
+  background: #000000 url(../../../images/edit_icon.svg) center no-repeat;
+  border: 1px solid #FFFFFF;
+}
+
+@media(max-width: 500px) {
+  .button_edit {
+    width: 18px;
+    height: 18px;
+  }
+}
+

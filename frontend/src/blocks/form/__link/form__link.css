@@ -1,0 +1,15 @@
+.form__link {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.form__link:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}

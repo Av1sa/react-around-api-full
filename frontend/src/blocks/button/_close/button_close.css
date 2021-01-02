@@ -1,0 +1,9 @@
+.button_close {
+  background: url(../../../images/close_icon.svg) center no-repeat;
+  position: absolute;
+  border: none;
+  top: -40px;
+  right: -40px;
+  width: 40px;
+  height: 40px;
+}

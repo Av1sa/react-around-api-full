@@ -1,0 +1,13 @@
+.profile__text-container {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 800px) {
+  .profile__text-container {
+    justify-content: center;
+  }
+}
