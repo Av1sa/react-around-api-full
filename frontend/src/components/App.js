@@ -37,7 +37,7 @@ function App() {
         setCards(cardListData);
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
       });
     const token = localStorage.getItem("jwt");
     if (token) {

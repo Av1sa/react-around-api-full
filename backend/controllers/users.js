@@ -2,7 +2,12 @@ const User = require("../models/user");
 const { secretKey } = require("../utils/utils");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { NotFoundError, UnauthorizedError } = require("../errors/errors");
+const {
+  NotFoundError,
+  UnauthorizedError,
+  BadInputError,
+} = require("../errors/errors");
+const { StatusCodes } = require("http-status-codes");
 
 const getUsers = (req, res) => {
   User.find({})
@@ -42,15 +47,11 @@ const createUser = (req, res) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name, avatar, about }))
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError("User not found");
-      }
-      const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: "7d" });
-      res.send({ data: user, token });
-    })
+    .then((user) => res.status(StatusCodes.OK).send({ user }))
     .catch((err) => {
-      res.send({ message: "User with such an email already exists" });
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .send({ message: "User not created. Try again" });
       return next();
     });
 };
@@ -87,25 +88,18 @@ const loginUser = (req, res) => {
           new UnauthorizedError("Incorrect password or email")
         );
       }
-      // console.log("password", password);
-      // console.log("user.password", user.password);
-      return bcrypt
-        .compare(password, user.password)
-        .then((matched) => {
-          console.log("matched", matched);
-          // console.log("user", user);
-          if (!matched) {
-            return Promise.reject(
-              new UnauthorizedError("Incorrect password or email")
-            );
-          }
-          const token = jwt.sign({ _id: user._id }, secretKey, {
-            expiresIn: "7d",
-          });
-          // console.log("token", token);
-          res.status(200).send({ token });
-        })
-        .catch(next);
+      return [bcrypt.compare(password, user.password), user];
+    })
+    .then(([matched, user]) => {
+      if (!matched) {
+        return Promise.reject(
+          new UnauthorizedError("Incorrect password or email")
+        );
+      }
+      const token = jwt.sign({ _id: user._id }, secretKey, {
+        expiresIn: "7d",
+      });
+      res.status(StatusCodes.OK).send({ token });
     })
     .catch(next);
 };
