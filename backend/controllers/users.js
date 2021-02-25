@@ -9,7 +9,7 @@ const {
 } = require("../errors/errors");
 const { StatusCodes } = require("http-status-codes");
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       if (!users) {
@@ -20,7 +20,7 @@ const getUsers = (req, res) => {
     .catch(next);
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
@@ -31,32 +31,27 @@ const getUser = (req, res) => {
     .catch(next);
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError("User not found");
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch(next);
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { email, password, name, avatar, about } = req.body;
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name, avatar, about }))
     .then((user) => res.status(StatusCodes.OK).send({ user }))
-    .catch((err) => {
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .send({ message: "User not created. Try again" });
-      return next();
-    });
+    .catch((err) => next(new BadInputError("User already exists")));
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -67,7 +62,7 @@ const updateProfile = (req, res) => {
     .catch(next);
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -78,7 +73,7 @@ const updateAvatar = (req, res) => {
     .catch(next);
 };
 
-const loginUser = (req, res) => {
+const loginUser = (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .select("+password")
@@ -88,18 +83,20 @@ const loginUser = (req, res) => {
           new UnauthorizedError("Incorrect password or email")
         );
       }
-      return [bcrypt.compare(password, user.password), user];
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(
+            new UnauthorizedError("Incorrect password or email")
+          );
+        }
+        return user;
+      });
     })
-    .then(([matched, user]) => {
-      if (!matched) {
-        return Promise.reject(
-          new UnauthorizedError("Incorrect password or email")
-        );
-      }
+    .then((user) => {
       const token = jwt.sign({ _id: user._id }, secretKey, {
         expiresIn: "7d",
       });
-      res.status(StatusCodes.OK).send({ token });
+      return res.status(StatusCodes.OK).send({ token });
     })
     .catch(next);
 };
