@@ -6,16 +6,16 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [about, setAbout] = React.useState("");
 
   React.useEffect(() => {
     setName(currentUser.name);
-    setDescription(currentUser.about);
+    setAbout(currentUser.about);
   }, [currentUser]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateUser({ name, description });
+    onUpdateUser({ name, about });
   };
 
   const editProfileChildren = () => {
@@ -45,8 +45,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
             maxLength="200"
             required
             id="desc-input"
-            value={description || ""}
-            onChange={(e) => setDescription(e.target.value)}
+            value={about || ""}
+            onChange={(e) => setAbout(e.target.value)}
           />
           <span className="popup__input-error" id="desc-input-error"></span>
         </label>

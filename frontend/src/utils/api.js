@@ -9,24 +9,33 @@ class Api {
   }
 
   //GET Get initial cards
-  getInitialCards() {
+  getInitialCards(token) {
     return fetch(`${this.baseUrl}/cards`, {
-      headers: this.headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${token}`,
+      },
     }).then((res) => this._getResponseData(res));
   }
 
   //GET Get user info
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(`${this.baseUrl}/users/me`, {
-      headers: this.headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`,
+      },
     }).then((res) => this._getResponseData(res));
   }
 
   //PATCH Set user info
-  setUserInfo({ name, about }) {
+  setUserInfo({ name, about, token }) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this.headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`,
+      },
       body: JSON.stringify({ name, about }),
     }).then((res) => this._getResponseData(res));
   }
@@ -35,7 +44,7 @@ class Api {
   setUserAvatar({ avatar }) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this.headers,
+      headers: this._headers,
       body: JSON.stringify({ avatar }),
     }).then((res) => this._getResponseData(res));
   }
@@ -66,14 +75,14 @@ class Api {
   }
 
   //Get initial data
-  getAppInfo() {
-    return Promise.all([this.getInitialCards(), this.getUserInfo()]);
+  getAppInfo(token) {
+    return Promise.all([this.getInitialCards(token), this.getUserInfo(token)]);
   }
 }
 
 const api = new Api({
-  //baseUrl: "https://around.nomoreparties.co/v1/group-1", 
-  baseUrl: "http://localhost:3000", 
+  //baseUrl: "https://around.nomoreparties.co/v1/group-1",
+  baseUrl: "http://localhost:3000",
   headers: {
     //Authorization: "02dcf3f3-4313-4731-b00a-f80d0e88b6bf",
     "Content-Type": "application/json",
@@ -81,3 +90,12 @@ const api = new Api({
 });
 
 export default api;
+// ///
+// fetch(`http://localhost:3000/users/me`, {
+//   method: "PATCH",
+//   headers: {
+//     "Content-Type": "application/json",
+//     "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDM3Yjc1OGJkNTU0YjI0M2IwM2EyODMiLCJpYXQiOjE2MTQyOTQxOTEsImV4cCI6MTYxNDg5ODk5MX0.o7d6YUbB6hhcY-UR_PWDALjSJqFbEZSDW4XlboXovTs`,
+//   },
+//   body: JSON.stringify({ "Andy Sam", "Act" }),
+// }

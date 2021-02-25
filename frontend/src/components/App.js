@@ -27,21 +27,14 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
   const history = useHistory();
 
   useEffect(() => {
-    api
-      .getAppInfo()
-      .then(([cardListData, userInfoData]) => {
-        setCurrentUser(userInfoData);
-        setCards(cardListData);
-      })
-      .catch((error) => {
-        //console.log(error);
-      });
     const token = localStorage.getItem("jwt");
     if (token) {
       validateAndSetUser(token);
+      setToken(token);
     }
   }, []);
 
@@ -49,8 +42,15 @@ function App() {
     auth
       .validateUser(token)
       .then((user) => {
+        setCurrentUser(user);
         setLoggedIn(true);
-        setEmail(user.data.email);
+        setEmail(user.email);
+        api
+          .getInitialCards(token)
+          .then((cardListData) => setCards(Array.from(cardListData)))
+          .catch((error) => {
+            console.log(error);
+          });
         history.push("/");
       })
       .catch((err) => console.log(err));
@@ -71,9 +71,12 @@ function App() {
   const openErrorTooltip = () => {
     setIsErrorTooltipOpen(true);
   };
-  const handleUpdateUser = ({ name, description }) => {
+  const handleUpdateUser = ({ name, about }) => {
+    // console.log('token', token);
+    // console.log('name', name);
+    // console.log('about', about);
     api
-      .setUserInfo({ currentUser, name: name, about: description })
+      .setUserInfo({ name, about, token })
       .then((res) => {
         setCurrentUser({
           ...currentUser,
@@ -103,7 +106,7 @@ function App() {
 
   const handleAddPlaceSubmit = ({ name, link }) => {
     api
-      .addCard({ name, link })
+      .addCard({ name, link, token })
       .then((newCard) => {
         setCards([...cards, newCard]);
         closeAllPopups();
@@ -148,6 +151,7 @@ function App() {
   };
   const handleSignOut = () => {
     localStorage.removeItem("jwt");
+    setToken("");
     setLoggedIn(false);
     setEmail("");
     history.push("/signin");
@@ -157,6 +161,7 @@ function App() {
       .signInUser(data)
       .then(({ token }) => {
         localStorage.setItem("jwt", token);
+        setToken(token);
         validateAndSetUser(token);
       })
       .catch((err) => {
