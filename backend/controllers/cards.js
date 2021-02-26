@@ -7,7 +7,7 @@ const getCards = (req, res, next) => {
       if (!cards) {
         throw new NotFoundError("Card not found");
       }
-      res.send({ data: cards });
+      res.send(cards);
     })
     .catch(next);
 };
@@ -18,7 +18,7 @@ const deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError("Card not found");
       }
-      res.send({ data: card });
+      res.send(card);
     })
     .catch(next);
 };
@@ -30,9 +30,9 @@ const createCard = (req, res, next) => {
       if (!card) {
         throw new BadInputError("Bad input");
       }
-      res.send({ data: card });
+      res.send(card);
     })
-    .catch(next);
+    .catch(err => res.send(err));
 };
 
 const likeCard = (req, res, next) => {
@@ -45,7 +45,7 @@ const likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError("Card not found");
       }
-      res.send({ data: card });
+      res.send(card);
     })
     .catch(next);
 };
@@ -60,7 +60,7 @@ const dislikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError("Card not found");
       }
-      res.send({ data: card });
+      res.send(card);
     })
     .catch(next);
 };

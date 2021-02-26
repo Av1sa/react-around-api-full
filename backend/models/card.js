@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { regex } = require('../utils/utils');
+const mongoose = require("mongoose");
+const { regex } = require("../utils/utils");
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -20,7 +20,8 @@ const cardSchema = new mongoose.Schema({
     required: true,
   },
   likes: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [],
+    default: [],
   },
   createdAt: {
     type: Date,
@@ -28,4 +29,4 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('card', cardSchema);
+module.exports = mongoose.model("card", cardSchema);
