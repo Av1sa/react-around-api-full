@@ -33,11 +33,12 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      validateAndSetUser(token);
       setToken(token);
+      validateAndSetUser(token);
     }
   }, []);
 
+  //Validate, register, login
   const validateAndSetUser = (token) => {
     auth
       .validateUser(token)
@@ -47,114 +48,23 @@ function App() {
         setEmail(user.email);
         api
           .getInitialCards(token)
-          .then((cardListData) => setCards(Array.from(cardListData)))
-          .catch((error) => {
-            console.log(error);
-          });
+          .then((cardListData) => setCards(cardListData))
+          .catch((err) => console.log(err));
         history.push("/");
       })
       .catch((err) => console.log(err));
   };
-
-  const handleEditAvatarClick = () => {
-    setIsEditAvatarPopupOpen(true);
-  };
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(true);
-  };
-  const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpen(true);
-  };
-  const openSuccessTooltip = () => {
-    setIsSuccessTooltipOpen(true);
-  };
-  const openErrorTooltip = () => {
-    setIsErrorTooltipOpen(true);
-  };
-  const handleUpdateUser = ({ name, about }) => {
-    // console.log('token', token);
-    // console.log('name', name);
-    // console.log('about', about);
-    api
-      .setUserInfo({ name, about, token })
+  const handleRegister = (data) => {
+    auth
+      .registerUser(data)
       .then((res) => {
-        setCurrentUser({
-          ...currentUser,
-          name: res.name,
-          about: res.about,
-        });
-        closeAllPopups();
+        openSuccessTooltip();
+        history.push("/signin");
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        openErrorTooltip();
+        console.log(err);
       });
-  };
-  const handleUpdateAvatar = ({ avatar }) => {
-    api
-      .setUserAvatar({ avatar })
-      .then((res) => {
-        setCurrentUser({
-          ...currentUser,
-          avatar: res.avatar,
-        });
-        closeAllPopups();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleAddPlaceSubmit = ({ name, link }) => {
-    api
-      .addCard({ name, link, token })
-      .then((newCard) => {
-        setCards([...cards, newCard]);
-        closeAllPopups();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((c) => c._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, isLiked ? "DELETE" : "PUT")
-      .then((newCard) => {
-        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-        setCards(newCards);
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleCardDelete = (card) => {
-    api
-      .removeCard(card._id)
-      .then((res) => {
-        const newCards = cards.filter((c) => c._id !== card._id);
-        setCards(newCards);
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleCardClick = (card) => {
-    setIsImagePopupOpen(true);
-    setSelectedCard(card);
-  };
-  const closeAllPopups = () => {
-    setIsEditAvatarPopupOpen(false);
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setIsImagePopupOpen(false);
-    setSelectedCard({});
-
-    setIsSuccessTooltipOpen(false);
-    setIsErrorTooltipOpen(false);
-  };
-  const handleSignOut = () => {
-    localStorage.removeItem("jwt");
-    setToken("");
-    setLoggedIn(false);
-    setEmail("");
-    history.push("/signin");
   };
   const handleSignIn = (data) => {
     auth
@@ -169,17 +79,100 @@ function App() {
         console.log(err);
       });
   };
-  const handleRegister = (data) => {
-    auth
-      .registerUser(data)
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt");
+    setToken("");
+    setLoggedIn(false);
+    setEmail("");
+    history.push("/signin");
+  };
+  const openSuccessTooltip = () => {
+    setIsSuccessTooltipOpen(true);
+  };
+  const openErrorTooltip = () => {
+    setIsErrorTooltipOpen(true);
+  };
+
+  //User
+  const handleEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(true);
+  };
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
+  };
+  const handleUpdateUser = ({ name, about }) => {
+    api
+      .setUserInfo({ name, about, token })
       .then((res) => {
-        openSuccessTooltip();
-        history.push("/signin");
+        setCurrentUser({
+          ...currentUser,
+          name: res.name,
+          about: res.about,
+        });
+        closeAllPopups();
       })
-      .catch((err) => {
-        openErrorTooltip();
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
+  };
+  const handleUpdateAvatar = ({ avatar }) => {
+    api
+      .setUserAvatar({ avatar, token })
+      .then((res) => {
+        setCurrentUser({
+          ...currentUser,
+          avatar: res.avatar,
+        });
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //Cards
+  const handleAddPlaceClick = () => {
+    setIsAddPlacePopupOpen(true);
+  };
+  const handleAddPlaceSubmit = ({ name, link }) => {
+    api
+      .addCard({ name, link, token })
+      .then((newCard) => {
+        setCards([...cards, newCard]);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((c) => c === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, isLiked ? "DELETE" : "PUT", token)
+      .then((newCard) => {
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleCardDelete = (card) => {
+    api
+      .removeCard(card._id, token)
+      .then((res) => {
+        const newCards = cards.filter((c) => c._id !== card._id);
+        setCards(newCards);
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleCardClick = (card) => {
+    setIsImagePopupOpen(true);
+    setSelectedCard(card);
+  };
+
+  //Popups
+  const closeAllPopups = () => {
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsImagePopupOpen(false);
+    setSelectedCard({});
+
+    setIsSuccessTooltipOpen(false);
+    setIsErrorTooltipOpen(false);
   };
 
   return (

@@ -1,7 +1,7 @@
 class Auth {
   constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;
-    this._headers = headers;
+    this.baseUrl = baseUrl;
+    this.headers = headers;
   }
 
   _getResponseData(res) {
@@ -10,29 +10,27 @@ class Auth {
 
   //Register user
   registerUser(data) {
-    console.log(this._baseUrl);
-    return fetch(`${this._baseUrl}/signup`, {
+    return fetch(`${this.baseUrl}/signup`, {
       method: "POST",
-      headers: this._headers,
+      headers: this.headers,
       body: JSON.stringify(data),
     }).then(this._getResponseData);
   }
 
   //Sign in user
   signInUser(data) {
-    // console.log('data', data);
-    return fetch(`${this._baseUrl}/signin`, {
+    return fetch(`${this.baseUrl}/signin`, {
       method: "POST",
-      headers: this._headers,
+      headers: this.headers,
       body: JSON.stringify(data),
     }).then(this._getResponseData);
   }
 
   //Check token and get user email
   validateUser(token) {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return fetch(`${this.baseUrl}/users/me`, {
       headers: {
-        ...this._headers,
+        ...this.headers,
         Authorization: `Bearer ${token}`,
       },
     }).then(this._getResponseData);
@@ -40,7 +38,6 @@ class Auth {
 }
 
 const auth = new Auth({
-  // baseUrl: "https://register.nomoreparties.co",
   baseUrl: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",

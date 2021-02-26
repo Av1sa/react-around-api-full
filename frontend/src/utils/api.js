@@ -12,7 +12,7 @@ class Api {
   getInitialCards(token) {
     return fetch(`${this.baseUrl}/cards`, {
       headers: {
-        ...this._headers,
+        ...this.headers,
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => this._getResponseData(res));
@@ -22,8 +22,8 @@ class Api {
   getUserInfo(token) {
     return fetch(`${this.baseUrl}/users/me`, {
       headers: {
-        ...this._headers,
-        "Authorization": `Bearer ${token}`,
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
       },
     }).then((res) => this._getResponseData(res));
   }
@@ -33,43 +33,55 @@ class Api {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
       headers: {
-        ...this._headers,
-        "Authorization": `Bearer ${token}`,
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ name, about }),
     }).then((res) => this._getResponseData(res));
   }
 
   //PATCH Set user avatar
-  setUserAvatar({ avatar }) {
+  setUserAvatar({ avatar, token }) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ avatar }),
     }).then((res) => this._getResponseData(res));
   }
 
   //POST Add new place
-  addCard({ name, link }) {
+  addCard({ name, link, token }) {
     return fetch(`${this.baseUrl}/cards`, {
-      headers: this.headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
       method: "POST",
       body: JSON.stringify({ name, link }),
     }).then((res) => this._getResponseData(res));
   }
 
   //DELETE Remove place
-  removeCard(cardId) {
+  removeCard(cardId, token) {
     return fetch(`${this.baseUrl}/cards/${cardId}`, {
-      headers: this.headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
       method: "DELETE",
     }).then((res) => this._getResponseData(res));
   }
 
   //PUT/DELETE Change Like status
-  changeLikeCardStatus(cardId, method) {
-    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-      headers: this.headers,
+  changeLikeCardStatus(cardId, method, token) {
+    return fetch(`${this.baseUrl}/cards/${cardId}/likes/`, {
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
       method: method,
     }).then((res) => this._getResponseData(res));
   }
@@ -81,21 +93,10 @@ class Api {
 }
 
 const api = new Api({
-  //baseUrl: "https://around.nomoreparties.co/v1/group-1",
   baseUrl: "http://localhost:3000",
   headers: {
-    //Authorization: "02dcf3f3-4313-4731-b00a-f80d0e88b6bf",
     "Content-Type": "application/json",
   },
 });
 
 export default api;
-// ///
-// fetch(`http://localhost:3000/users/me`, {
-//   method: "PATCH",
-//   headers: {
-//     "Content-Type": "application/json",
-//     "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDM3Yjc1OGJkNTU0YjI0M2IwM2EyODMiLCJpYXQiOjE2MTQyOTQxOTEsImV4cCI6MTYxNDg5ODk5MX0.o7d6YUbB6hhcY-UR_PWDALjSJqFbEZSDW4XlboXovTs`,
-//   },
-//   body: JSON.stringify({ "Andy Sam", "Act" }),
-// }
