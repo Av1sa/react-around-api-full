@@ -36,13 +36,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-// //Remove after passing the review
-// app.get("/crash-test", () => {
-//   setTimeout(() => {
-//     throw new Error("Server will crash now");
-//   }, 0);
-// });
-// /////
+//Remove after passing the review
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
 
 app.post(
   "/signin",
