@@ -18,7 +18,7 @@ function InfoTooltip({ isOpen, onClose, type }) {
   return (
     <div className={`popup ${isOpen && "popup_is-opened"}`}>
       <div className="popup__container popup__container_form popup__container_tooltip">
-        <img src={src} alt={alt} />
+        <img src={src} alt={alt}/>
         <p className="popup__text">{text}</p>
         <button className="button button_close" onClick={onClose}></button>
       </div>
