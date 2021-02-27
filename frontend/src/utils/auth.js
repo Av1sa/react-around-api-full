@@ -38,7 +38,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: "//api.mm15.students.nomoreparties.site",
+  baseUrl: "https://api.mm15.students.nomoreparties.site",
   headers: {
     "Content-Type": "application/json",
   },
