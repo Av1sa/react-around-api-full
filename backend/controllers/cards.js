@@ -17,7 +17,7 @@ const getCards = (req, res, next) => {
 const deleteCard = (req, res, next) => {
   if (!(req.params.cardId === req.user._id)) {
     res
-      .status(StatusCodes.NOT_FOUND)
+      .status(StatusCodes.FORBIDDEN)
       .send({ message: 'Delete your own cards!' });
   } else {
     Card.findByIdAndRemove(req.params.cardId)
