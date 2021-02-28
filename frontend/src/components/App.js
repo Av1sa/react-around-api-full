@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import Header from "./Header";
-import ProtectedRoute from "./ProtectedRoute";
-import Main from "./Main";
-import Footer from "./Footer";
-import PopupWithImage from "./PopupWithImage";
-import EditProfilePopup from "./EditProfilePopup";
-import EditAvatarPopup from "./EditAvatarPopup";
-import AddPlacePopup from "./AddPlacePopup";
-import Login from "./Login";
-import Register from "./Register";
-import InfoTooltip from "./InfoTooltip";
-import api from "../utils/api";
-import auth from "../utils/auth";
+import React, { useState, useEffect } from 'react';
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import Header from './Header';
+import ProtectedRoute from './ProtectedRoute';
+import Main from './Main';
+import Footer from './Footer';
+import PopupWithImage from './PopupWithImage';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
+import Login from './Login';
+import Register from './Register';
+import InfoTooltip from './InfoTooltip';
+import api from '../utils/api';
+import auth from '../utils/auth';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -26,16 +26,17 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [token, setToken] = useState("");
+  const [email, setEmail] = useState('');
+  const [token, setToken] = useState('');
   const history = useHistory();
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem('jwt');
     if (token) {
       setToken(token);
       validateAndSetUser(token);
     }
+    // eslint-disable-next-line
   }, []);
 
   //Validate, register, login
@@ -50,16 +51,16 @@ function App() {
           .getInitialCards(token)
           .then((cardListData) => setCards(cardListData))
           .catch((err) => console.log(err));
-        history.push("/");
+        history.push('/');
       })
       .catch((err) => console.log(err));
   };
   const handleRegister = (data) => {
     auth
       .registerUser(data)
-      .then((res) => {
+      .then(() => {
         openSuccessTooltip();
-        history.push("/signin");
+        history.push('/signin');
       })
       .catch((err) => {
         openErrorTooltip();
@@ -70,7 +71,7 @@ function App() {
     auth
       .signInUser(data)
       .then(({ token }) => {
-        localStorage.setItem("jwt", token);
+        localStorage.setItem('jwt', token);
         setToken(token);
         validateAndSetUser(token);
       })
@@ -80,11 +81,11 @@ function App() {
       });
   };
   const handleSignOut = () => {
-    localStorage.removeItem("jwt");
-    setToken("");
+    localStorage.removeItem('jwt');
+    setToken('');
     setLoggedIn(false);
-    setEmail("");
-    history.push("/signin");
+    setEmail('');
+    history.push('/signin');
   };
   const openSuccessTooltip = () => {
     setIsSuccessTooltipOpen(true);
@@ -142,7 +143,7 @@ function App() {
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((c) => c === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, isLiked ? "DELETE" : "PUT", token)
+      .changeLikeCardStatus(card._id, isLiked ? 'DELETE' : 'PUT', token)
       .then((newCard) => {
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
         setCards(newCards);
@@ -152,7 +153,7 @@ function App() {
   const handleCardDelete = (card) => {
     api
       .removeCard(card._id, token)
-      .then((res) => {
+      .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
       })
@@ -199,7 +200,7 @@ function App() {
           <Register onRegister={handleRegister} />
         </Route>
         <Route>
-          <Redirect to={loggedIn ? "/" : "/signin"} />
+          <Redirect to={loggedIn ? '/' : '/signin'} />
         </Route>
       </Switch>
       {loggedIn && <Footer />}

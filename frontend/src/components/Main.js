@@ -1,7 +1,7 @@
-import React from "react";
-import editIconLarge from "../images/edit_large_icon.svg";
-import Card from "../components/Card";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import React from 'react';
+import editIconLarge from '../images/edit_large_icon.svg';
+import Card from '../components/Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main({
   cards,

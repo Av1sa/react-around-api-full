@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function PopupWithForm({
   name,
@@ -10,7 +10,7 @@ function PopupWithForm({
   onSubmit,
 }) {
   return (
-    <div className={`popup popup_type_${name} ${isOpen && "popup_is-opened"}`}>
+    <div className={`popup popup_type_${name} ${isOpen && 'popup_is-opened'}`}>
       <div className="popup__container popup__container_form">
         <form
           className="popup__form"

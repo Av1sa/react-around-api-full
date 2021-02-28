@@ -11,7 +11,7 @@ class Auth {
   //Register user
   registerUser(data) {
     return fetch(`${this.baseUrl}/signup`, {
-      method: "POST",
+      method: 'POST',
       headers: this.headers,
       body: JSON.stringify(data),
     }).then(this._getResponseData);
@@ -20,7 +20,7 @@ class Auth {
   //Sign in user
   signInUser(data) {
     return fetch(`${this.baseUrl}/signin`, {
-      method: "POST",
+      method: 'POST',
       headers: this.headers,
       body: JSON.stringify(data),
     }).then(this._getResponseData);
@@ -38,9 +38,9 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: "https://api.mm15.students.nomoreparties.site",
+  baseUrl: 'https://api.mm15.students.nomoreparties.site',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

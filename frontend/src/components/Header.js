@@ -1,6 +1,6 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import logo from "../images/logo.svg";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../images/logo.svg';
 
 function Header({ email, loggedIn, onSignOut }) {
   const location = useLocation();
@@ -22,9 +22,9 @@ function Header({ email, loggedIn, onSignOut }) {
       ) : (
         <Link
           className="header__nav-text"
-          to={location.pathname === "/signin" ? "/signup" : "/signin"}
+          to={location.pathname === '/signin' ? '/signup' : '/signin'}
         >
-          {location.pathname === "/signin" ? "Sign up" : "Sign in"}
+          {location.pathname === '/signin' ? 'Sign up' : 'Sign in'}
         </Link>
       )}
     </header>

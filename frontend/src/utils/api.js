@@ -31,7 +31,7 @@ class Api {
   //PATCH Set user info
   setUserInfo({ name, about, token }) {
     return fetch(`${this.baseUrl}/users/me`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         ...this.headers,
         Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ class Api {
   //PATCH Set user avatar
   setUserAvatar({ avatar, token }) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         ...this.headers,
         Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ class Api {
         ...this.headers,
         Authorization: `Bearer ${token}`,
       },
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ name, link }),
     }).then((res) => this._getResponseData(res));
   }
@@ -71,7 +71,7 @@ class Api {
         ...this.headers,
         Authorization: `Bearer ${token}`,
       },
-      method: "DELETE",
+      method: 'DELETE',
     }).then((res) => this._getResponseData(res));
   }
 
@@ -93,9 +93,9 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://api.mm15.students.nomoreparties.site",
+  baseUrl: 'https://api.mm15.students.nomoreparties.site',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

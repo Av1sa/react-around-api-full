@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
 function PopupWithImage({ card, onClose, isOpen }) {
   const { name, link } = card;
   return (
-    <div className={`popup popup_image ${isOpen && "popup_is-opened"}`}>
+    <div className={`popup popup_image ${isOpen && 'popup_is-opened'}`}>
       <div className="popup__container">
         <img className="popup__image" alt={name} src={link} />
         <h2 className="popup__image-title">{name}</h2>

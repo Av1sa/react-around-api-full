@@ -1,11 +1,13 @@
-const Card = require("../models/card");
-const { BadInputError, NotFoundError } = require("../errors/errors");
+const { StatusCodes } = require('http-status-codes');
+const Card = require('../models/card');
+const { BadInputError } = require('../errors/BadInputError');
+const { NotFoundError } = require('../errors/NotFoundError');
 
 const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
       if (!cards) {
-        throw new NotFoundError("Card not found");
+        throw new NotFoundError('Card not found');
       }
       res.send(cards);
     })
@@ -13,14 +15,20 @@ const getCards = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError("Card not found");
-      }
-      res.send(card);
-    })
-    .catch(next);
+  if (!(req.params.cardId === req.user._id)) {
+    res
+      .status(StatusCodes.NOT_FOUND)
+      .send({ message: 'Delete your own cards!' });
+  } else {
+    Card.findByIdAndRemove(req.params.cardId)
+      .then((card) => {
+        if (!card) {
+          throw new NotFoundError('Card not found');
+        }
+        res.send(card);
+      })
+      .catch(next);
+  }
 };
 
 const createCard = (req, res, next) => {
@@ -28,22 +36,22 @@ const createCard = (req, res, next) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
       if (!card) {
-        throw new BadInputError("Bad input");
+        throw new BadInputError('Bad input');
       }
       res.send(card);
     })
-    .catch(err => res.send(err));
+    .catch(next);
 };
 
 const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError("Card not found");
+        throw new NotFoundError('Card not found');
       }
       res.send(card);
     })
@@ -54,11 +62,11 @@ const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError("Card not found");
+        throw new NotFoundError('Card not found');
       }
       res.send(card);
     })

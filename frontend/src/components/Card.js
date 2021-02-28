@@ -1,5 +1,5 @@
-import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import React from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Card({ card, onCardDelete, onCardClick, onCardLike }) {
   const currentUser = React.useContext(CurrentUserContext);
@@ -31,7 +31,7 @@ function Card({ card, onCardDelete, onCardClick, onCardLike }) {
         <p className="card__text">{name}</p>
         <div className="card__likes-container">
           <button
-            className={`button button_like ${isLiked && "button_like-black"}`}
+            className={`button button_like ${isLiked && 'button_like-black'}`}
             onClick={handleLikeClick}
           />
           <p className="card__likes-text">{likes.length}</p>
